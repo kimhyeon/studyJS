@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>추상 팩토리</title>
+</head>
+<body>
+<script type="text/javascript">
+// 디자인 패턴은 어떤 문제에 대한 해법이다.
+// 어떠한 문제를 해결할 수 있는 패턴을 알고 있으면 문제가 반복적으로 발생할 지라도 같은 방법으로 해결할 수 있다.
+
+// 하나씩 만들기엔 코드가 중복되는게 많을 경우
+// 유형을 먼저 등록받고, 알아서 구현하도록 한다.
+
+// 팩토리라고 이름지어진 것은 공장에서 찍어내듯 객체를 생성할 수 있기 때문입니다. emperor나 governor 외에도 general, senator 등의 직업을 더 추가할 수 있습니다. 
+
+// !!!! 정리하면 추상 팩토리 패턴은 하나의 팩토리로 여러 종류의 팩토리를(Emperor, Governor) 동시에 운영할 수 있다. 
+
+var abstractCharacterFactory = (function() {
+	var jobs = {};
+	return {
+		addJob: function(job, Character) {
+			// attack 메소드가 있어야 등록가능
+			if (Character.prototype.attack) { 
+				jobs[job] = Character;
+			} else {
+				console.log("need attack method");
+			}
+		},
+		// 등록한 직업을 바탕으로 실제 객체 생성
+		create: function(job, options) {
+			var Character = jobs[job];
+			return (Character ? new Character(options) : null);
+		}
+	}
+})();
+
+var Emperor = (function(){
+	var Emperor = function(options) {
+		this.name = options.name;
+	}
+	Emperor.prototype.attack = function(target) {
+		console.log(this.name + '가 ' + target.name + '을 공격합니다');
+	}
+	Emperor.prototype.proclaim = function() {
+	    console.log(this.name + '가 스스로를 황제라고 칭했습니다');
+	}
+	return Emperor;
+})();
+
+var Governor = (function() {
+	var Governor = function(options) {
+		this.name = options.name;
+	}
+	Governor.prototype.attack = function(target) {
+		console.log(this.name + '가 ' + target.name + '을 공격합니다');
+	};
+	Governor.prototype.betray = function() {
+		console.log(this.name + '가 황제를 배신합니다');
+	};
+	return Governor;
+})();
+
+abstractCharacterFactory.addJob('emperor', Emperor);
+abstractCharacterFactory.addJob('governor', Governor);
+
+var nero = abstractCharacterFactory.create('emperor', { name: 'Nero' });
+
+var vindex = abstractCharacterFactory.create('governor', { name: 'Vindex'});
+
+var galba = abstractCharacterFactory.create('governor', { name: 'Galba' });
+
+var otho = abstractCharacterFactory.create('governor', { name: 'otho' });
+var vitellius = abstractCharacterFactory.create('governor', { name: 'vitellius' });
+var rufus = abstractCharacterFactory.create('governor', { name: 'rufus' });
+
+
+</script>
+</body>
+</html>
