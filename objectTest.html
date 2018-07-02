@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+<script type="text/javascript">
+/////////////////////////////
+function Person(name) {
+	this.name = name;
+}
+Person.prototype.sayHello = function() {
+	console.log(this.name);
+}
+
+var zero = new Person("zero");
+///////////////////////////////
+
+var GrandParent = function() {};
+
+var Parent = function() {};
+Parent.prototype = new GrandParent();
+// Parent.prototype = Object.create(GrandParent);
+// Parent.prototype.constructor = Parent;
+
+var Child = function() {};
+Child.prototype = new Parent();
+// Child.prototype = Object.create(Parent);
+// Child.prototype.constructor = Child;
+
+var child = new Child();
+Parent.prototype.isPrototypeOf(child);
+GrandParent.prototype.isPrototypeOf(child); 
+ 
+//////////////////////////
+///writable : 값 변경 가능하냐, 
+///configurable : 속성변경 가능하냐, 
+///enumerable, 
+/// get, set ,
+/// value: 기본 값
+
+var obj22 = Object.create(null, {
+	a: {
+		writable: true,
+		configurable: false,
+		value: 5
+	}
+});
+obj22.a;
+
+var tobj = {};
+Object.defineProperties(tobj, {
+	a: {
+		value: 5,
+		writable: false,
+		enumerable: true
+	},
+	b: {
+		get: function() {
+			console.log('b.get');
+			return 0;
+		},
+		set: function() {
+			console.log('b.set');
+			return 0;	
+		},
+		enumerable: false,
+   	 	configurable: false,
+	}
+
+});
+
+// Object.defineProperty(tobj, 'b', {
+//   value: 5
+// }); 
+// Uncaught TypeError: Cannot redefine property: b
+
+Object.getOwnPropertyDescriptor(tobj, 'b')
+
+Object.defineProperty(tobj, 'c', {
+	value: {x:3, y:4},
+	writable: false,
+	enumerable: true,
+});
+///////////////////////////////////////////////////
+///
+///
+///
+
+var ttobj = {
+	x: 'local',
+	y: function() {
+		alert(x);
+	}
+}
+
+var another = function() {
+	var x = 'local';
+	function y() {
+		alert(x);
+	}
+	return { y : y };
+}
+var newScope = another();
+
+// 즉시 실행 함수 표현(IIFE, Immediately Invoked Function Expression)
+// 모듈 패턴이라고도 한다.
+var newScope2 = (function () {
+	var x = 'local';
+	return {
+		y: function() {
+			alert(x);
+		}
+	}
+})();
+
+
+</script>
+
+</body>
+</html>
