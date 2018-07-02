@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>함수형 프로그래밍</title>
+</head>
+<body>
+
+<script type="text/javascript">
+// 함수형 프로그래밍 [순수 함수]
+// 1. 입출력이 순수해야한다. (반드시 하나 이상의 인자를 받아 결과를 돌려준다.)
+// - 인자를 제외한 다른 변수를 사용하면 안된다. 인자만으로 결과 돌려줌
+// - 원본 데이터는 불변해야 한다.
+
+// 대표적 함수형 프로그래밍 함수들이 있다. map, filter, reduce
+
+// Array.prototype.map() : 메소드는 배열 내의 모든 요소 각각에 대하여 제공된 함수(callback)를 호출하고, 그 결과를 모아서 새로운 배열을 반환합니다.
+var arr = [1, 2, 3 , 4, 5];
+var myMap = arr.map(function(x){
+	return x * 2;
+}); // [2, 4, 6, 8, 10]
+
+
+// Array.prototype.filter() : 메소드는 제공된 함수로 구현된 테스트를 통과하는 모든 요소가 있는 새로운 배열을 만듭니다.
+var arr2 = [1, 2, 3 , 4, 5]; 
+var condtition = function(x) { return x % 2 === 0 };
+var ex = function(array, cond) {
+	var temp = array.filter(cond);
+	console.warn(temp);
+	return temp;
+}
+ex(arr2, condtition);
+
+</script>
+</body>
+</html>

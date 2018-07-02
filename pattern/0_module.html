@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>모듈 패턴</title>
+</head>
+<body>
+<script type="text/javascript">
+
+// IIFE : 즉시 실행 함수 표현(IIFE, Immediately Invoked Function Expression)
+// (function(){})() 많은 라이브러리가 이 구문을 활용한다. 
+// 함수를 선언하자마자 바로 실행시킨다.
+// 
+
+// 모듈패턴에서는 비공개 변수를 사용할 수 있다. 
+// 사용자는 비공개 변수를 수정할 수 없다.
+
+var modulePattern = (function() {
+	var x = 'local';
+	return {
+		getX: function() {
+			console.log(x);
+			return x;
+		}
+	}
+})();
+
+var str = modulePattern.getX();
+
+</script>
+</body>
+</html>

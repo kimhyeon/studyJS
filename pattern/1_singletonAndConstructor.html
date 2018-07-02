@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>싱글턴, 생성자 패턴!!</title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+// 싱글턴 : 단 하나의 객체를 만들어 같이 사용한당.
+// 속성이 비공개 처리 되어 있다.
+
+var singleton = (function(){
+	var instance;
+	var a = 'hello';
+	var b = 'bbbb';
+	function initiate() {
+		return {
+			a: a, // 변경 가능함..
+			getA: function() {
+				console.warn(a);
+				return a;
+			},
+			getB: function() {
+				console.warn(b);
+				return b;
+			}
+		}
+	}
+	return {
+		getInstance: function() {
+			if (!instance) {
+				console.log("not exist instance");
+				instance  = initiate();
+			} else {
+				console.log("exist instance");
+			}
+			return instance;
+		}
+	}
+})();
+
+var first = singleton.getInstance();
+var second = singleton.getInstance();
+console.log(first === second);
+first.getA();
+
+// 생성자 패턴 : 대부분의 객체는 이패턴으로 만들게 된다.
+// 상속이 필요한 경우 많이 사용됨.
+
+// [기존 생성자 만들때...]
+function Vehicle1(name, speed) {
+	this.name = name;
+	this.speed = speed;
+}
+Vehicle1.prototype.drive = function() {
+	console.log(this.name + ' runs at ' + this.speed);
+}
+
+// [생성자 패턴] : 위의 코드를 IIFE 을 사용해 묶어준다.
+var Vehicle2 = (function(){
+	// 이름이 같아도 IIFE를 사용하기 때문에 변수 Vehicle2에 바로 덮어씌워진다.!!
+	function Vehicle2(name, speed) {
+		this.name = name;
+		this.speed = speed;
+	}
+	Vehicle2.prototype.drive = function() {
+		console.log(this.name + ' runs at ' + this.speed);
+	}
+	return Vehicle2;
+})();
+
+var tico = new Vehicle2("tico", "75");
+tico.drive();
+
+</script>
+</body>
+</html>
