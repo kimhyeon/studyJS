@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+
+// name space !!
+var testFunc = function() {
+	var x = 'local'; // 비공개 변수
+	function y() {
+		console.log(x);
+	}
+	return {
+		y: y
+	}
+}
+var tt = testFunc();
+
+function testFunc2() {
+	var x = 'local';
+	function y() {
+		console.log(x);
+	}
+	return {
+		y: y
+	}	
+}
+var tt2 = testFunc2();
+
+// IIFE 즉시 호출 함수 표현식, Immediately Invoked Function Expression
+var tt3 = (function() {
+	var x = 'local';
+	function y() {
+		console.log(x);
+	}
+	return {
+		y: y
+	}	 
+})();
+
+// (function() {})(); 구문을 IIFE 또는 모듈 패턴 이라고 한다. 함수를 선언하자마자 실행 시킨다.
+
+var test = (function() {
+	return function() {console.log("IIFE!?");};
+})();
+
+
+// JSON Test
+
+var dummyTest = {
+	name: "herry",
+	age: 28
+}
+var jsonText = JSON.stringify(dummyTest);
+console.log(jsonText)
+console.log(JSON.parse(jsonText));
+
+</script>
+</body>
+</html>

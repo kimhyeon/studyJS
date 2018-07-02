@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<script type="text/javascript">
+// 브라우저가 스크립트 로딩할 때 전역 컨텍스트가 생긴다.
+// 전역 컨텍스트는 페이지 종료시까지 유지 된다.
+// 
+// 전역 컨텍스트 생성 후, 함수 호출 시마다 함수 컨텍스트가 생긴다.
+// 컨텍스트 안에는 변수객체(arguments, variable), scope chain, this가 생서된다.
+// 자신의 context에서 변수를 찾을 수 없다면 scope cahin을 따라 올라가며 변수를 
+// 	찾는다.
+// 컨텍스트 생성 후 함수 실행됨.
+// 함수 실행 완료 시 해당 컨텍스트는 사라진다. (클로저 제외)
+// 페이지 종료 시 전역 컨텍스트도 사라진다.
+// 일반 함수의 this는 기본적으로 window 고 new 나 bind 같은 상황에서 this가 바뀜
+
+var name = 'zero';
+function wow(word) {
+	console.log(word+ ' '+name);
+	console.warn(this);
+}
+function say() {
+	var name = 'nero';
+	console.log(name);
+	wow('hello');
+}
+say();
+
+function Person(age) {
+	console.warn(this);
+	this.age = age;
+}
+
+var test = new Person(123);
+
+//////////////////////////////////////////////////////////////////////////////
+// 호이스팅 : 변수를 선언하고 초기화했을 때 선언 부분이 최상단으로 끌어올려지는 현상을 의미한다.
+
+console.log(declareTest); // undefined, 변수 대입은 변수 선언 이후에 이러나기 때문에!
+var declareTest = "declareTest";
+ 
+// 함수 표현식이 아닌, 함수 선언식일 때는 코드 자체가 통째로 끌어 올려진다.
+
+// 함수 선언식 정상동작
+funcDeclare();
+function funcDeclare() { // 함수 선언 식임으로, 선언과 동시에 바로 대입됨
+	console.log("funcDeclare()");
+}
+
+// 함수 표현식 에러발생, funcExpress is not a function
+//funcExpress(); // 2 - 함수호출 // 대입 되기전 호출되어 에러 발생
+var funcExpress = function() { // 1 - 선언, 3- 대입
+	console.log("funcExpress()");	
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// 클로저 : 비공개 변수를 가질 수 있는 환경에 있는 함수를 클로저라 한다.
+// closure 는 내부함수가 외부함수의 맥락에 접근할 수 있는 것을 가르킨다.
+// 자바스크립트를 이용한 고난이도의 테크닉을 구사하는데 필수적 개념이다.
+
+var makeClosure = function() {
+	var name = 'zero'; // 비공개 변수
+	return function() {
+		console.log(name);
+	}
+}
+
+var closure = makeClosure();
+closure();
+
+// 클로저 예
+
+var counter = function() {
+	var count = 0;
+	function changeCount(number) {
+		count += number;
+	}
+	return {
+		add: function() {
+			changeCount(1);
+		},
+		del: function() {
+			changeCount(-1);
+		},
+		show: function() {
+			console.log(count);
+		}
+	}
+}
+
+// 비공개 변수 counter에 접근할 수 있다.
+var counterClosure = counter();
+counterClosure.add();
+counterClosure.show(); // 1
+counterClosure.del();
+counterClosure.show(); // 0
+
+// 사용자를 통제하기 위한 기본적인 방법이 클로저다.
+// 단점 : 잘못 사용 시 메모리문제 발생가능, scope chain을 거슬러 올라가기 때문에 조금 느리다.
+
+
+</script>
+
+</body>
+</html>

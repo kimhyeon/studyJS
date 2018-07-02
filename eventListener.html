@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<button id="btn1">btn1</button>
+<button id="btn2">btn2</button>
+<br>
+<div id="first" style="width: 300px; height: 300px; border: 1px solid black; margin-top: 10px;">
+	<div id="second" style="width: 200px; height: 200px; border: 1px solid black;">
+		<div id="third" style="width: 100px; height: 100px; border: 1px solid black;">
+			
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+// basic
+document.getElementById("btn1").onclick = function() {
+	console.log("btn1 clicked!");
+}
+
+// addEventLister
+// 여러 이벤트를 등록할 수 있고, 특정 이벤트를 제거 할 수 있다.
+function func1() {
+	console.log("func1()");
+}
+
+function func2() {
+	console.log("func2()");
+}
+document.getElementById("btn2").addEventListener('click', func1);
+document.getElementById("btn2").addEventListener('click', func2);
+document.getElementById("btn2").addEventListener('click', function(event){
+	console.log(event);
+});
+document.getElementById("btn2").removeEventListener('click', func2);
+
+
+// 콜백 : 이벤트가 실행 됐을때 사용자에게 다시알려줌, 이벤트가 아니더라도 콜백사용가능
+var cbTest = function(number, cb) {
+	setTimeout(function() {
+		var sum = 0;
+		for (var i = number; i > 0; i--) {
+			sum += i;
+		}
+		cb(sum);
+	}, 0);
+}
+
+cbTest(10, function(result) {
+	console.log(result);
+});
+
+// 이벤트 버블링
+// 버블링 : 자식의 이벤트가 부모에게도 전달된다.
+// event 객체 : 이벤트에 대한 정보들과 이벤트를 조작하는 메서드를 가지고있다.
+
+function bublingTest(event) {
+	console.log(event.target.id);
+	console.log(event);
+	
+	// 태그의 기본 동작을 하지 않게 막아준다.
+	// ex : a 태그는 클릭 시 이동, form 태그는 폼 내용 전송
+	event.preventDefault(); 
+
+	// 부모에게 이벤트 전달되지 않도록 한다.!!
+	event.stopPropagation();
+
+	// 현재 이벤트가 부모(상위)뿐 아니라 - event.stopPropagation() + 알파
+	// 현재 레벨에 걸린 다른 이벤트도 동작하지 않도록 한다.
+	//  click 이벤트에서 설정 했기 때문에 다른 click 이벤트가 동작하지 않는닷!!!
+	event.stopImmediatePropagation();
+
+}
+
+function bublingTest2(evnt) {
+	console.log("on mouse over!!");
+	console.log(event.target.id);
+	console.log(event);
+	// 기본적으로 버블링 발생 안하나 보다?
+}
+
+function bbt(event) {
+	console.log("bbt");
+	console.log(event.target.id);
+	console.log(event);
+}
+
+document.getElementById("first").addEventListener('click', bublingTest);
+document.getElementById("second").addEventListener('click', bublingTest);
+document.getElementById("third").addEventListener('click', bublingTest);
+
+document.getElementById("third").addEventListener('mouseover', bublingTest2);
+document.getElementById("third").addEventListener('click', bbt);
+
+
+</script>
+
+</body>
+</html>
