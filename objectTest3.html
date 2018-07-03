@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>비공개 멤버</title>
+</head>
+<body>
+<script type="text/javascript">
+	
+var Person = (function() {
+	// 비공개 멤버
+	var skill = "zero";
+	var Person = function(name, pSkill) {
+		this.name = name;
+		skill = pSkill;
+	}
+	Person.prototype.getSkill = function() {
+		console.log(skill);
+		return skill;
+	}
+	return Person;
+})();
+
+var herry = new Person("herry", "EXIT");
+herry.getSkill();
+
+</script>
+</body>
+</html>

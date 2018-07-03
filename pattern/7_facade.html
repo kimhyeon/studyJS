@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+// 파사드 : 외관, 세부적인것 복잡한 것은 감추고 간단한 것만 보여주는 패턴
+
+// 사용자는 간단한 명령을 하면 복잡한 로직은 내부적으로 처리된다.
+// 
+// 최소한의 API만 공개하는 게 좋습니다. 이렇게 일부만 노출하는 패턴을 퍼사드 패턴이라고 합니다.
+
+var Galba = (function() {
+	function Galba(){
+		this.legions = [];
+	  	this.legions.push(new Legion('A_Legion',100));
+	    this.legions.push(new Legion('B_Legion', 20));
+	    this.legions.push(new Legion('C_Legion', 30000));
+	}
+	Galba.prototype.march = function() {
+		this.legions.forEach(function(legion) {
+			legion.supply();
+			legion.makeFormation();
+			legion.goForward();
+		});
+	}
+	Galba.prototype.attack = function() {
+		this.legions.forEach(function(legion) {
+			legion.makeFormation();
+			legion.pullOutSword();
+			legion.runToEnemy();
+		});
+	};
+	Galba.prototype.halt = function() {
+		this.legions.forEach(function(legion) {
+			legion.halt();
+		});
+	};
+	Galba.prototype.retreat = function() {
+		this.legions.forEach(function(legion) {
+			legion.retreat();
+		});
+	};
+	return Galba;
+})();
+
+var Legion = (function() {
+	var Legion = function(name, number) {
+		this.name = name;
+		this.number = number;
+	}
+	Legion.prototype.supply = function() {
+		console.log("%s supply!!", this.name);
+	};
+	Legion.prototype.makeFormation = function() {
+		console.log("%s makeFormation!!", this.name);
+	};
+	Legion.prototype.goForward = function() {
+		console.log("%s goForward!!", this.name);
+	};
+	Legion.prototype.pullOutSword = function() {
+		console.log("%s pullOutSword!!", this.name);
+	};
+	Legion.prototype.runToEnemy = function() {
+		console.log("%s runToEnemy!!", this.name);
+	};
+	Legion.prototype.halt = function() {
+		console.log("%s halt!!", this.name);
+	};
+	Legion.prototype.retreat = function() {
+		console.log("%s retreat!!", this.name);
+	};
+	return Legion;
+})();
+
+// march 메소드만 호출 하였지만 내부적으로 여러 매소드들이 호출된다..
+galba.march();
+/*/
+A_Legion supply!!
+A_Legion makeFormation!!
+A_Legion goForward!!
+B_Legion supply!!
+B_Legion makeFormation!!
+B_Legion goForward!!
+C_Legion supply!!
+C_Legion makeFormation!!
+C_Legion goForward!!
+*/
+
+</script>
+</body>
+</html>
