@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>method test</title>
+</head>
+<body>
+<script type="text/javascript">
+	
+var list = [1, 2, 100, 40 ,5, 50, 70];
+
+var tt = list.every(function(number) {
+	return number > 40;
+});
+
+var qq = list.some(function(number) {
+	return number > 40;
+});
+
+var new_list = list.filter(function(number) {
+	return number > 40;
+});
+
+console.log(tt, qq, new_list);
+
+</script>
+</body>
+</html>

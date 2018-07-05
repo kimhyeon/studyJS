@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>커맨드 패턴</title>
+</head>
+<body>
+<script type="text/javascript">
+
+var Vitellius = (function() {
+	function Vitellius() {}
+	Vitellius.prototype.approve = function(commander) {
+		commander.execute();
+	};
+
+	return Vitellius;
+})();
+
+var Commander = (function () {
+	function Commander() {
+		this.commands = [];
+	}
+	Commander.prototype.execute = function() {
+		this.commands.forEach(function(command) {
+			command();
+		});
+	}
+	Commander.prototype.do = function(command, args) {
+		this.commands.push(function() {
+			command.call(null, args);
+		});
+	}
+	Commander.prototype.undo = function() {
+		this.commands.pop();
+	}
+	return Commander;
+})();
+
+var strategy = {
+	climbAlps: function() {
+	    console.log('알프스를 오릅니다');
+	},
+	prepareSupply: function(number) {
+	    console.log('보급품을 ' + number + '만큼 준비합니다');
+	},
+	attackRome: function() {
+    	console.log('로마를 공격합니다');
+	},
+	killTheKing: function() {
+    	console.log('황제를 죽입니다.');
+	}
+}
+
+var vitellius = new Vitellius();
+
+var caecina = new Commander();
+caecina.do(strategy.prepareSupply, 5000);
+caecina.undo();
+caecina.do(strategy.prepareSupply, 10000);
+caecina.do(strategy.climbAlps);
+caecina.do(strategy.attackRome);
+caecina.do(strategy.killTheKing);
+
+vitellius.approve(caecina);
+
+// 보통 명령 패턴에서는 한 번에 몰아서 실행하지 않고 그 때 그 때 바로 실행합니다.
+// commander 는 명령을 총체적으로 관리하는 객체고, 명령을 실행한다!!
+// strategy 는 명령을 모아둔 객체.
+// vitellius 는 사용자라고 생각하면된다.
+
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>반복자 패턴</title>
+</head>
+<body>
+<script type="text/javascript">
+// 반복자 패턴 : 순서가 있는 것들(배열..)을 편리하게 탐색할 수 있는 패턴
+// 순서대로만 나열되면 되는 경우 반복자 패턴이 유용하다. 
+
+var Beehives = (function() {
+	function Beehives(hiveList) {
+		this.hiveList = hiveList;
+		this.index = 0;
+	}
+	Beehives.prototype.next = function() {
+		//console.log(this.hiveList[this.index++] + "에서 꿀을 걷습니다.");
+		return this.hiveList[this.index++];
+	}
+	Beehives.prototype.done = function() {
+		return this.hiveList.length === this.index;
+	}
+	return Beehives;
+})();
+
+var beehives = new Beehives(['hive1', 'hive2', 'hive3', 'hive4', 'hive5', 'hive6', 'hive7', 'hive8', 'hive9']);
+
+while(!beehives.done()) {
+	var hive = beehives.next();
+	console.log("hive : "+hive);
+	console.log(hive + "에서 꿀을 걷습니다.");
+}
+
+</script>
+</body>
+</html>

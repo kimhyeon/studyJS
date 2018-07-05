@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>옵저버 패턴</title>
+</head>
+<body>
+<script type="text/javascript">
+
+// 옵저버 패턴 :  객체의 상태 변화를 관찰하는 관찰자들, 즉 옵저버들의 목록을 객체에 등록하여 상태 변화가 있을 때마다 메서드 등을 통해 객체가 직접 목록의 각 옵저버에게 통지하도록 하는 디자인 패턴이다. 
+// 주로 분산 이벤트 핸들링 시스템을 구현하는 데 사용된다.
+
+var Vespasianus = (function() {
+	function Vespasianus() {
+		this.subscribers = [];	
+	}
+	Vespasianus.prototype.publish = function(message) {
+		var self = this;
+		// Array.prototype.every() : 메소드는 배열의 모든 요소가 제공한 함수로 구현된 테스트를 통과하는지를 테스트합니다.
+		this.subscribers.every(function(subscriber) {
+			subscriber.fire(self);
+			return true;
+		});
+	};
+	Vespasianus.prototype.register = function(target) {
+		this.subscribers.push(target);
+	}
+	return Vespasianus;
+})();
+
+// 옵저버
+var Mucianus = (function() {
+	function Mucianus() {
+		this.list = [];
+	}
+	Mucianus.prototype.subscribe = function(target) {
+		this.list.push({
+			target: target,
+			point: 0,
+		});
+		target.register(this);
+	}
+	Mucianus.prototype.unsubscribe = function(target) {
+		// filter() 메소드는 제공된 함수로 구현된 테스트를 통과하는 모든 요소가 있는 새로운 배열을 만듭니다.
+		this.list.filter(function(person) {
+			return person.target !== target;
+		});
+	}
+	Mucianus.prototype.fire = function(target, message) {
+		// some() 메소드는 배열 내 일부 요소가 제공된 함수에 의해 구현된 테스트를 통과하는지를 테스트합니다.
+		this.list.forEach(function(person) {
+	    	if (person.target === target) {
+		    	console.log(person.target, target, person.target === target);
+	    		++person.point;
+	    		return true;
+	    	}
+		});
+	}
+	return Mucianus;
+})();
+
+var vespasianus = new Vespasianus();
+var mucianus = new Mucianus();
+
+mucianus.subscribe(vespasianus);
+vespasianus.publish();
+
+
+
+var User = (function() {
+	function User(name) {
+		this.subscribers = [];
+		this.name = name;
+	}
+	User.prototype.register = function(subscriber) {
+		this.subscribers.push(subscriber);
+	}
+	User.prototype.publish = function(message) {
+		var self = this;
+		this.subscribers.forEach(function(subscriber) {
+			subscriber.fire(self, message);
+		});
+	}
+	return User;
+})();
+
+
+var MyObserver = (function() {
+	var MyObserver = function(name) {
+		this.list = [];
+		this.name = name;
+	}
+	MyObserver.prototype.subscribe = function(target) {
+		this.list.push({
+			target: target,
+			point: 0,
+		});
+	    target.register(this);
+	}
+	MyObserver.prototype.unsubscribe = function(target) {
+		this.list.filter(function(listObj) {
+			return listObj.target !== target;
+		});
+	}
+	MyObserver.prototype.fire = function(target, message) {
+		var self = this;
+		this.list.forEach(function(obj) {
+			if (obj.target == target) {
+				console.log(self.name, target, message);
+				obj.point++;
+			}
+		});
+	}
+	return MyObserver;
+})();
+
+var user = new User("herry");
+var myObserver = new MyObserver("myobserver");
+
+myObserver.subscribe(user);
+myObserver.subscribe(vespasianus);
+
+mucianus.subscribe(user);
+
+</script>
+</body>
+</html>

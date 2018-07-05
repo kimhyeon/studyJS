@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>책임 연쇄 패턴</title>
+</head>
+<body>
+<script type="text/javascript">
+// 동작의 처리를 자신이 할지 다음으로 넘길지 결정하는 패턴을 책임 연쇄 패턴이라 한다.
+// 책임을 다음 순서에게 떠넘기기 때문에 책임 연쇄 패턴이라고 이름지어졌습니다. 
+
+var General = (function() {
+	function General(name) { 
+		this.name = name;
+	}
+	General.prototype.canMakeDecision = function() {
+		// 복잡학 확인 코드
+		return false;
+	}
+	General.prototype.makeDecision = function() {
+		console.log("맞서 싸운다.");
+	}
+	return General;
+})();
+	
+var Senator = (function() {
+	function Senator(name) {
+		this.name = name;
+	}
+	Senator.prototype.canMakeDecision = function() {
+		// 복잡학 확인 코드
+		return false;
+	}
+	Senator.prototype.makeDecision = function() {
+		console.log("눈치를본다.");
+	}
+	return Senator;
+})();
+
+var Emperor = (function() {
+	function Emperor(name) {
+		this.name = name;
+	}
+	Emperor.prototype.canMakeDecision = function() {
+		// 복잡학 확인 코드
+		return true;
+	}
+	Emperor.prototype.makeDecision = function() {
+		console.log('항복한다');
+		console.log('자결한다');
+	}
+	return Emperor;
+})();
+
+var DecisionMaker = (function() {
+	function DecisionMaker() {
+		this.decisionMakers = [];
+		this.decisionMakers.push(new General("general"));
+		this.decisionMakers.push(new Senator("senator"));
+		this.decisionMakers.push(new Emperor("emperor"));
+	}
+	DecisionMaker.prototype.makeDecision = function() {
+		for(var i = 0; i < this.decisionMakers.length; i++) {
+			if (this.decisionMakers[i].canMakeDecision()) {
+				console.log("%s can choice", this.decisionMakers[i].name);
+				return this.decisionMakers[i].makeDecision();
+			} else {
+				console.log("%s can't choice", this.decisionMakers[i].name);
+			}
+		}
+	}
+	return DecisionMaker;
+})();
+
+var choice = new DecisionMaker();
+choice.makeDecision();
+
+</script>
+</body>
+</html>
