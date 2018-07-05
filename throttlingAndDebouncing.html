@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>쓰로틀링과 디바운싱</title>
+</head>
+
+
+<body>
+낫디바운싱 <input id="tInput" type="" name="" style="width: 300px"><br><br>
+디바운싱   <input id="tInput2" type="" name="" style="width: 300px">
+
+<div id="area"
+	style="margin-top: 40px; margin-left: 20px; width: 300px; height: 300px; border:1px solid #000000; overflow-y: scroll;">
+	<div style="width: 100%; height: 900px">only scroll</div>
+</div>
+
+<div id="area2"
+	style="margin-top: 40px; margin-left: 20px; width: 300px; height: 300px; border:1px solid #000000; overflow-y: scroll; float: left;">
+	<div style="width: 100%; height: 900px">throttling</div>
+</div>
+
+<div id="area3"
+	style="margin-top: 40px; margin-left: 20px; width: 300px; height: 300px; border:1px solid #000000; overflow-y: scroll; float: left;">
+	<div style="width: 100%; height: 900px">debouncing</div>
+</div>
+
+<script type="text/javascript">
+
+// 디바운싱	: 연이어 호출되는 함수들 중 마지막 함수(또는 제일 처음)만 호출하도록 하는 것
+// 디바운싱은 주로 ajax 검색에 자주 쓰인다.
+
+// 아래와 같이 한 글자를 입력 할때마다 API를 호출 한다고 하면, 큰 낭비가 된다.
+document.querySelector("#tInput").addEventListener('keypress', function(e) {
+	console.log("[AJAX]", e.target.value);
+});
+
+// 디바운싱!!!
+var timer;
+document.querySelector("#tInput2").addEventListener('input', function(e) {
+	if (timer) {
+		clearTimeout(timer);
+	}
+	timer = setTimeout(function() {
+		console.log('[*AJAX]', e.target.value);
+	}, 200);
+});
+
+
+
+// 쓰로틀링[조절] : 마지막 함수가 호출된 후 일정 시간이 지나기 전에 다시 호출되지 않도록 하는 것
+// 쓰로틀링은 보통 성능 문제 때문에 많이 사용된다. 특성 자체가 실행 회수에 제한을 거는 것. 
+// 스크롤을 올리거나 내릴 때 scroll 이벤트가 매우 많이 발생한다!!!!. 
+// scroll  이벤트가 발생할 때 뭔가 복잡한 작업을 하도록 설정했다면... 렉이 걸린다 이때 쓰로틀링을 걸어준다.
+// 
+// 몇초에 한번, 또는 몇 밀리초에 한 번씩만 실행되게 제한을 둔다.
+
+document.querySelector("#area").addEventListener('scroll', function(e) {
+	console.log("[AJAX]","scroll");
+});
+
+// 최소 200밀리초 마다 요청을 보낸다. ajax 검색은 디바운싱으로 처리하는 게 더 나아 보인다.
+var throtleTimer;
+document.querySelector("#area2").addEventListener('scroll', function(e) {
+	if(!throtleTimer) {
+		throtleTimer = setTimeout(function() {
+			throtleTimer = null;
+			console.log('[*AJAX]', e.target.scrollTop);
+		}, 200);
+	} 
+});
+
+var testDebouncing;
+document.querySelector("#area3").addEventListener('scroll', function(e) {
+	if (testDebouncing) {
+		clearTimeout(testDebouncing);
+	}
+	testDebouncing = setTimeout(function(){
+		console.log('[**AJAX]', e.target.scrollTop);
+	}, 200);
+});
+
+</script>
+
+</body>
+</html>

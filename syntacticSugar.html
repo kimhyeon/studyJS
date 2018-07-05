@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+// 직관적이지는 않지만 코드의 양을 줄여줍니다. 이런 것들을 syntactic sugar라고 부르는 데요. 문법적인 설탕이란 뜻으로, 프로그래밍을 할 때 문법적으로 알아두면 편한 것들을 말합니다.
+
+// 보호 연산과 기본값 연산
+// false 성질을 띄는 것을 이용 
+// [undefined, null, 0, '', false, NaN] -> flase!!!
+
+var a, b, c, d;
+a = undefined;
+d = null;
+// c = 123;
+// d = 10;
+// 
+
+// 가장 먼저 참인 변수의 값이 들어간다. + 모두 참이 아닌경우 마지막 false 값이 들어간다.
+var result = a || b || c || d; 
+console.log(result); // 123
+
+var q, w, e, r;
+q = 10;
+// w = 11;
+// e = 12;
+// r = 13;
+
+var result2 = q && w && e && r;
+console.log("&&",result2); //13
+
+//  ||는 주로 기본값(default)을 정할 때 많이 쓰입니다. 
+//  예를 들면 다음과 같이 사용자가 함수의 인자로 아무 것도 안 넣어주었을 때 기본으로 []가 설정됩니다.
+
+function setting(option) {
+	var result = option || [];
+	return console.log(result);
+}
+setting([1, 2, 3]); // [1, 2, 3]
+setting(); // []
+
+// 조건부(삼항) 연산자도 동일하게 동작한다
+var option = [1, 2, 3];
+var tt = option ? option : [];
+console.log(tt);
+
+
+// &&는 필수 조건을 의미할 때 주로 쓰입니다.
+function condition(cond) {
+	var result = cond && 'hello';
+	return console.log(cond, result);
+}
+condition(true); // hello
+condition(); // undefined
+
+// &&는 또는 객체 안의 속성에 안전하게 접근하기 위해 사용됩니다. 
+// 보호 연산이 이런 의미입니다. cannot read property of undefined 에러를 피하기 위해 사용되죠.
+
+var obj = {
+	inner: {
+		deeper: 10,
+	},
+	inner2: 2,
+}
+// ps) || 가장 먼저 true 인거 들어감... + 다 false 인경우 마지막 false 값들어감..
+// && 맨마지막 값이 들어감..+ 하나라도false 인경우 아예 안들어감!!!
+var objResult = obj && obj.inner && obj.inner.deeper; 
+var objResult2 = obj && obj.inner && obj.inner2;
+var objResult3 = obj && obj.inner && obj.inner3333333;
+
+console.log(objResult, objResult2, objResult3);
+
+
+// 불린 변환 : 
+// 느낌표 두개를 사용해 쉽게 해당 값이 true인지 false인지를 확인한다.
+var z = [];
+var zz = NaN;
+
+console.log(!!z, !!zz);
+
+</script>
+
+</body>
+</html>
