@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CSS와 관련된 JS</title>
+</head>
+<body>
+<div><span id="sTest">Show me the money</span></div>
+
+<div id="box" style="width: 300px; height: 200px; border: 1px solid #000000; margin: 30px;"></div>
+
+<script type="text/javascript">
+
+// 	JS로 CSS를 조작하는 것은 피해야함 (지양)!!
+//  CSS3로 할수 있는건 CSS3로~
+//  스크롤 관련된 문제를 해결하기 위해선 JS로 CSS를 조작해야 하는 경우가 발생함
+
+// document.querySelector('선택자').style.display = 'inline-block';
+// 주의할 점은 - 가 들어간 css 속성입니다. -는 빼고, -뒤에 나오는 글자는 대문자로 바꿔주어야합니다
+// JS 에서 - 가 뺄셈 연산자로 취급되어서 캐멀케이스로 바꾸는 작업이 필요한겁니다.
+
+// css : font-size, -> js : fontSize
+
+var testSpan = document.querySelector("#sTest");
+
+console.log(testSpan.style.fontSize); 
+// 못 가져옴, 인라인 CSS만 가져올수 있기에....
+// getComputedStyle(태그) 를 사용해야 한다.
+
+console.log(getComputedStyle(testSpan).fontSize);
+
+testSpan.style.fontSize = '120%';
+console.log(testSpan.style.fontSize);
+
+
+// 태그의 너비와 높이 같은 것은 getComputedStyle 말고도 구할 수 있다.
+var box = document.querySelector("#box");
+// offsetWidth, scrollWidth, clientWidth
+// offsetHeight, scrollHeight, clientHeight
+
+console.log("[W]", box.offsetWidth, box.scrollWidth, box.clientWidth);
+console.log("[H]", box.offsetHeight, box.scrollHeight, box.clientHeight);
+
+// 페이지의 너비, 높이
+console.log("[inner]", window.innerWidth, window.innerHeight);
+
+// 모니터 자체의 해상도
+console.log("[avail]", screen.availWidth, screen.availHeight);
+
+// 태그가 위치한 x, y 좌표, getBoundingClientRect()
+console.log(box.getBoundingClientRect());
+console.log(box.getClientRects()); // 위랑 차의 배열에 들어있다?
+
+// 자바스크립트로 미디의 쿼리 확인, 어디에쓰는지 모르겟다..
+// 120%
+console.log(window.matchMedia('(font-size: 16px)').matches);
+
+</script>
+</body>
+</html>

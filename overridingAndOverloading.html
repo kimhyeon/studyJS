@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>오버라이딩(overriding) & 오버로딩(overloading)</title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+// 오버로딩 : 자바스크립트는 함수의 매개변수가 자유롭기 때문에 없는 개념이라 할 수 있다
+// 메소드 명은 동일 하지만 매개변수가 다르다.. 자바..
+// 자바스크립트에서는 자바 처럼 사용하면 마지막 함수가 기존 함수를 덮어 버린다.
+// 
+// 즉, 하나의 함수가 여러 경우를 모두 분기 해 처리 해야한다.
+
+function overload(a, b, c) {
+	if (typeof c === 'function') {
+		// 문자열 a, b 와 콜백 c
+		c(a, b);
+	} else if (typeof b === 'function') {
+		// 옵션 객체와 콜백
+		b(a);
+	} else {
+		// 콜백 하나
+		a();
+	}
+}
+
+function callback(a, b) {
+	if (b) {
+		console.log('문자열', a, b);
+	} else if (a) {
+		console.log('옵션 객체', a);
+	} else {
+		console.log('매개변수 없음');
+	}
+}
+
+overload('zero', 'qwer', callback);
+overload({ name: 'herry', age: 28 }, callback);
+overload(callback);
+
+// 오버라이딩 :  상송받은 부모의 메소드를 재정의 하는것, 
+// 자바스크립트에서는 오버라이딩 할때 자바와 다르게 매개변수가 자유롭고 리턴값의 자료형도 자유롭다.
+
+var Animal = (function() {
+	var Animal = function(name) {
+		this.name = name;
+	};
+	Animal.prototype.move = function() {
+		console.log("동물이 움직여요");
+	}
+	return Animal;
+})();
+
+var Cat = (function() {
+	var Cat = function() {
+		Animal.apply(this, arguments);
+	}
+	Cat.prototype = Object.create(Animal.prototype);
+	Cat.prototype.constructor = Cat;
+	return Cat;
+})();
+
+console.log(new Animal().move());
+console.log(new Cat().move());
+
+// 오버 라이딩 비스 무리...
+// Animal 에서 상속 받은 move 매소드를 재정의 함.
+// 자바와는 달리 부모 메소드를 오버라이딩 할 때 매개변수와 리턴 자료형이 달라도 된다.
+Cat.prototype.move = function(sound) {
+	console.log(sound + ' 움직여요');
+	return '야옹';
+}
+console.log(new Cat().move());
+
+
+</script>
+</body>
+</html>

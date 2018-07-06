@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>변수 변경 탐지</title>
+</head>
+<body>
+
+<div>[property setter getter]</div>
+<div id="count">0</div>
+<button id="up">+1</button>
+<button id="down">-1</button>
+<button id="clear">clear</button>
+<div style="height: 30px;"></div>
+
+<div>[proxy]</div>
+<div id="count2">0</div>
+<button id="up2">+1</button>
+<button id="down2">-1</button>
+<button id="clear2">clear</button>
+
+
+<script type="text/javascript">
+// ES2015에 와서는 getter, setter, proxy로 구현합니다.
+// ES2015(ES6) 코드이므로 크롬, 파이어폭스 같은 에버그린 브라우저에만 동작합니다.
+// 
+
+var count = {};
+Object.defineProperty(count, 'number', {
+	// _num : 비밀속성, 
+	get: function() {
+		console.log("[GET]");
+		//console.log(this);
+		//
+		// get 에서 this.number 를 가져오면 무한 get!!!! 이 일어 나기때문에
+		// this.__num 을 비밀변수로 사용한다.
+		return this.__num || 0;
+	},
+	set: function(num) {
+		console.log("[SET]");
+		this.__num = num;
+		console.log(this.__num);
+		document.querySelector("#count").textContent = num;
+	},
+});
+
+
+//var count = 0;
+//var counter = document.querySelector("#count");
+
+document.querySelector("#up").addEventListener('click' , function() {
+	count.number++;
+	//counter.textContent = count; // 중복됨(getterr, setter 로 제거함)
+});
+
+document.querySelector("#down").addEventListener('click' , function() {
+	count.number--;
+	//counter.textContent = count; // 중복됨(getterr, setter 로 제거함)
+});
+
+document.querySelector("#clear").addEventListener('click' , function() {
+	count.number = 0;
+	//counter.textContent = count; // 중복됨(getterr, setter 로 제거함)
+});
+
+// 주의할 점은 getter와 setter를 잘못 사용하면 무한 루프에 빠져 스택 오버플로우가 일어날 수도 있습니다. getter에서 속성에 대입을 한다거나 하면 getter가 setter를 호출하고, setter가 다시 getter를 호출하고... 무한 반복 끝에 스택 오버플로우가 터집니다. 이 점 조심하셔야 합니다.
+
+
+// 더 강력한 기능을 구현하고 싶다면 Proxy를 사용할 수 있다. ES2015에 추가된 기능이다.
+// Proxy는 기존 객체를 건드리지도 않고도 새 기능을 추가하거나 기존 기능을 수정할수 있는 기능이다.
+
+const count2 = {};
+const handler = {
+	get: (obj, name) => {
+		if (name === 'number') {
+			return this._num || 0;
+		}
+	},
+	set: (obj, name, value) => {
+		if (name === 'number') {
+			this._num = value;
+			console.log(count2); // {} 빈객체로 뜬다..., 프록시 객체와 실제 객체를 분리하여 사용하기때문
+			document.querySelector("#count2").textContent = this._num;
+		}	
+	}
+};
+
+const proxy = new Proxy(count2, handler);
+
+document.querySelector("#up2").addEventListener('click', (e) => {
+	proxy.number++;
+});
+
+document.querySelector("#down2").addEventListener('click', (e) => {
+	proxy.number--;
+});
+
+document.querySelector("#clear2").addEventListener('click', (e) => {
+	proxy.number = 0;
+});
+
+</script>
+</body>
+</html>
