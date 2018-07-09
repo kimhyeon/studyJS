@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>what is "this"?</title>
+	<div>
+		<p>test01</p>
+	</div>
+	<div>
+		<p>test02</p>
+	</div>
+	<div>
+		<p>test03</p>
+	</div>
+	<div>
+		<p>test04</p>
+	</div>
+	<div>
+		<p>test05</p>
+	</div>
+</head>
+<body>
+<button id="test">TEST</button>
+<button id="test2">TEST2</button>
+
+<script type="text/javascript">
+// this 는 기본적으로 window 다.
+console.log(this);
+
+// 객체의 메서드 a안의 this는 해당 객체를 가르킨다.
+// 객체의 메서드를 호출할 때 this를 내부적으로 바꿔준다.
+var obj = {
+	a: function() { console.log(this); }, // obj
+};
+obj.a();
+
+// 객체의 메서드가 아닌 일반 함수 인 경우 this 는 window가 된다.
+var a2 = obj.a;
+a2(); // window
+
+// call, apply, bind 를 사용해 this를 가르키는 객체를 바꿔줄 수 있다.
+var obj2 = {
+	name: "he",
+} 
+obj.a.call(obj2);
+
+// 생성자의 경우 new를 사용해 this가 생성된 인스턴스를 가르키도록 한다.
+function Person(name ,age) {
+	this.name = name;
+	this.age = age;
+}
+
+Person("herry", 128); // 함수의 this는 window이기 때문에 window에 name, age가 생긴다.
+
+// 이렇게 new를 붙이면 this가 생성자를 통해 생성된 인스턴스(자기자신)가 된다.
+var hero = new Person("herry", 28);
+
+
+// 일반 함수임에도 불구하고 이벤트가 발생할 때 내부적으로 this가 바뀐다... body로.
+document.querySelector("#test").addEventListener('click', function() {
+	console.log(this); // <button>
+	console.dir(this);
+
+});
+
+document.querySelector("#test2").addEventListener('click', function() {
+	var that = this;
+	function inner() {
+		console.log(this);
+		console.log(that);
+	}
+	inner();
+});
+
+// jquery 도 마찬가지로 내부적으로 function을 호출할 때 this가 바뀐다.
+
+/* 다시 한 번, 정리하자면, this는 기본적으로 window이지만, 객체 메서드, bind call apply, new일 때 this가 바뀝니다. 그리고 이벤트리스너나 기타 라이브러리처럼 this를 내부적으로 바꿀 수도 있으니 항상 this를 확인해보셔야 하고요. 
+여러분이 선언한 function의 this는 항상 window라는 것 알아두세요. */
+
+</script>
+</body>
+</html>

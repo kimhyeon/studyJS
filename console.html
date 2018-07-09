@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>console.log</title>
+</head>
+<body>
+
+<script type="text/javascript">
+var a = 1;
+var b = 'hello';
+var c = true;
+
+console.log(a);
+console.log(a, b, c);
+console.log("%d : %d", a, b);
+
+// 로깅을 할때 객체 사용시 실수를 많이한다.
+// console.log 는 참조를 로깅하기 때문에, 객체와 같이 내용물이 변할 수 있는 것들은 실시간으로 바뀐다.
+
+var obj = {};
+console.log(obj); // 콘솔을 켜보면 a값 이 들어가 있다.
+obj.a = 1;
+console.log(obj);
+
+// 객체를 로깅할 때는 객체의 내용 변경사항이 실시간으로 업데이트 된다!!
+// 객체가 아닌 값을 로깅하거나, 깊은 복사를 해 로깅 해야한다.
+
+// 객체는 dir, 나머지는 log 를 사용하면 편하다.
+console.log(document.body);
+console.dir(document.body);
+
+// 함수도 객체다
+function f() { return true; }
+console.log(f);
+console.dir(f);
+
+
+// 몇번 호출 되었나. 로깅하고 싶을 때 사용. 인자는 카운터 이름이다.
+console.count("c1");
+console.count("c1");
+console.count("c2");
+console.count("c1");
+console.count("c2");
+
+
+// 코드 수행 시간을 확인할때 유용. time, timeEnd
+console.time("myTimer");
+var result = 0;
+for (var i = 1; i < 10001; i++) {
+	result += i;
+}
+console.log(result);
+console.timeEnd("myTimer");
+
+</script>
+
+</body>
+</html>
